@@ -1,0 +1,14 @@
+services:
+  database:
+    container_name: "postgres-dev"
+    image: "postgres:16.3-alpine3.20"
+    env_file:
+      - ../.env.development
+    ports:
+      - "5432:5432"
+
+  socket-server:
+    container_name: "socket-server"
+    build: ../socket-server
+    ports:
+      - "4000:4000"
