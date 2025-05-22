@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
 
     fetchAvatarUrl();
   }, [session]);
-
+  
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -58,43 +58,23 @@ const Navbar: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <nav className="bg-gray-800 text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex space-x-6">
+          <div className="flex space-x-10">
             <Link href="/" className="hover:text-blue-300 transition">
               Home
             </Link>
-            <Link href="/upgrade" className="hover:text-blue-300 transition">
-              Upgrade
-            </Link>
+            {/*Search Link will be preserved for now to create a Search bar for Threads after*/}
             <Link href="/search" className="hover:text-blue-300 transition">
               Search
             </Link>
-            <Link href="/games" className="hover:text-blue-300 transition">
-              Games
-            </Link>
-            <Link href="/market" className="hover:text-blue-300 transition">
-              Market
-            </Link>
-            <Link href="/mm" className="hover:text-blue-300 transition">
-              MiddleMan
-            </Link>
-            <Link href="/affiliate" className="hover:text-blue-300 transition">
-              Affiliate
+            <Link href="/notebook" className="hover:text-blue-300 transition">
+              Your Notebook
             </Link>
             <Link href="/help" className="hover:text-blue-300 transition">
               Help
             </Link>
           </div>
-
+   
           <div className="flex items-center space-x-4">
-            <div className="flex space-x-2">
-              <div className="bg-gray-700 px-3 py-1 rounded-lg">
-                <span className="text-yellow-400">Credits:</span> 0
-              </div>
-              <div className="bg-gray-700 px-3 py-1 rounded-lg">
-                <span className="text-orange-400">BTC:</span> 0.00000000
-              </div>
-            </div>
-
             {session?.user && (
               <div className="relative">
                 <div
