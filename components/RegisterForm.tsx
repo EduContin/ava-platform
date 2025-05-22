@@ -74,15 +74,20 @@ export default function RegisterForm() {
     return true;
   };
 
-  const createPayment = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      await handleRegistration();
+    }
+  };
+
+  const handleRegistration = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/v1/create-invoice", {
+      const response = await fetch("/api/v1/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          pay_currency: "USD",
-          price_amount: 8,
           username,
           email,
           password,
@@ -92,23 +97,16 @@ export default function RegisterForm() {
 
       if (response.ok) {
         setIsSuccess(true);
-        const data = await response.json();
-        window.location.href = data.payment_url;
+        setShowSuccessMessage(true);
       } else {
-        throw new Error("Failed to create payment");
+        const errorData = await response.json();
+        setError(errorData.message || "Registration failed");
       }
     } catch (err) {
-      console.error("Payment creation error:", err);
-      setError("Failed to create payment. Please try again.");
+      console.error("Registration error:", err);
+      setError("Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      await createPayment();
     }
   };
 
@@ -194,22 +192,6 @@ export default function RegisterForm() {
                   </span>
                 </label>
               </div>
-              <Typography variant="body2" className="mb-4 text-slate-300">
-                You must pay $8 in the registration fee in order to create an
-                account.
-              </Typography>
-              <div className="flex items-center mb-4">
-                <Button
-                  onClick={() => setShowExchangeInfo(true)}
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  className="mb-4 mr-2"
-                  startIcon={<ArrowForward />}
-                >
-                  How to exchange crypto
-                </Button>
-              </div>
               <Button
                 type="submit"
                 variant="contained"
@@ -218,7 +200,7 @@ export default function RegisterForm() {
                 disabled={isLoading}
                 className="mb-4"
               >
-                {isLoading ? "Processing..." : "Pay registration fee - $8"}
+                {isLoading ? "Processing..." : "Register"}
               </Button>
             </form>
             <p className="mt-4 text-slate-300">
@@ -383,12 +365,14 @@ export default function RegisterForm() {
             </DialogActions>
           </Dialog>
 
-          <Snackbar
-            open={showSuccessMessage}
-            autoHideDuration={3000}
-            onClose={() => setShowSuccessMessage(false)}
-            message="Registration successful"
-          />
+          {showSuccessMessage && (
+            <Snackbar
+              open={showSuccessMessage}
+              autoHideDuration={6000}
+              onClose={() => setShowSuccessMessage(false)}
+              message="Registration successful! Please check your email to verify your account."
+            />
+          )}
         </div>
       </div>
     </Suspense>
