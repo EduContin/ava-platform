@@ -4,7 +4,7 @@ import database from "@/infra/database";
 
 export async function POST(request: Request) {
   try {
-    const { username, email, password, referralCode } = await request.json();
+    const { username, email, password } = await request.json();
 
     if (!username || !email || !password) {
       return NextResponse.json(
@@ -29,10 +29,8 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // TODO: Add referral code logic if needed
-
     const result = await database.query({
-      text: "INSERT INTO users (username, email, password, created_at, updated_at, user_role, status) VALUES ($1, $2, $3, NOW(), NOW(), 'user', 'active') RETURNING id, username, email, created_at, user_role, status",
+      text: "INSERT INTO users (username, email, password, created_at, user_group) VALUES ($1, $2, $3, NOW(), 'user') RETURNING id, username, email, created_at, user_group",
       values: [username, email, hashedPassword],
     });
 
@@ -45,8 +43,7 @@ export async function POST(request: Request) {
         username: newUser.username,
         email: newUser.email,
         createdAt: newUser.created_at,
-        role: newUser.user_role,
-        status: newUser.status
+        role: newUser.user_group,
       },
     });
   } catch (error) {
