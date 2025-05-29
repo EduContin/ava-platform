@@ -2,95 +2,128 @@ exports.up = async (pgm) => {
   // Insert sections
   await pgm.sql(`
     INSERT INTO sections (name, description) VALUES
-    ('Main', 'General forum sections'),
-    ('Software Development', 'Programming and software development'),
-    ('Networking', 'Computer networking and infrastructure'),
-    ('Cloud & DevOps', 'Cloud computing and DevOps'),
-    ('MarketPlace', 'Marketplace for buying and selling')
+    ('Experiência Criativa', 'Discussões e projetos de criatividade aplicada'),
+    ('Resolução de Problemas com Grafos', 'Teoria e prática de grafos'),
+    ('Métodos Quantitativos de Computação', 'Estudo de métodos quantitativos'),
+    ('Complexidade de Algoritmos', 'Análise e discussão sobre complexidade'),
+    ('Métodos de Pesquisa Científica', 'Metodologia e práticas de pesquisa')
   `);
 
   // Insert categories
   await pgm.sql(`
     INSERT INTO categories (section_id, parent_id, name, description, is_subfolder) VALUES
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'Announcements', 'Forum announcements', false),
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'Feedback and Suggestions', 'Provide feedback and suggestions', false),
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'Lounge', 'General discussion area', false),
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'Achievements and Flex', 'Share your achievements', false),
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'Tech News', 'Discuss technology news and trends', false),
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'Giveaways', 'Forum giveaways', false),
-    ((SELECT id FROM sections WHERE name = 'Main'), NULL, 'International Lounge', 'Discussions in various languages', false),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), NULL, 'Programming Lounge', 'General programming discussions', false),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), NULL, 'Languages & Frameworks', 'Discuss programming languages and frameworks', false),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), NULL, 'Tutorials', 'Programming tutorials and guides', false),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), NULL, 'Source Codes', 'Share your source codes', false),
-    ((SELECT id FROM sections WHERE name = 'Networking'), NULL, 'Networking Lounge', 'General networking discussions', false),
-    ((SELECT id FROM sections WHERE name = 'Networking'), NULL, 'Network Tools', 'Networking tools and utilities', false),
-    ((SELECT id FROM sections WHERE name = 'Networking'), NULL, 'Network Tutorials', 'Networking tutorials and guides', false),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), NULL, 'Cloud Lounge', 'Cloud computing discussions', false),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), NULL, 'DevOps', 'DevOps practices and tools', false),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), NULL, 'Cloud Tutorials', 'Cloud and DevOps tutorials', false),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), NULL, 'Marketplace Discussion', 'General marketplace discussions', false),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), NULL, 'Sellers Marketplace', 'For sellers to list their offerings', false),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), NULL, 'Buyers Marketplace', 'For buyers to post their requests', false)
+    ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), NULL, 'Projetos', 'Compartilhe seus projetos criativos', false),
+    ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), NULL, 'Discussões Gerais', 'Debates sobre criatividade', false),
+    ((SELECT id FROM sections WHERE name = 'Resolução de Problemas com Grafos'), NULL, 'Teoria dos Grafos', 'Conceitos e fundamentos', false),
+    ((SELECT id FROM sections WHERE name = 'Resolução de Problemas com Grafos'), NULL, 'Aplicações', 'Problemas resolvidos com grafos', false),
+    ((SELECT id FROM sections WHERE name = 'Métodos Quantitativos de Computação'), NULL, 'Estudos de Caso', 'Exemplos práticos', false),
+    ((SELECT id FROM sections WHERE name = 'Métodos Quantitativos de Computação'), NULL, 'Ferramentas', 'Softwares e métodos', false),
+    ((SELECT id FROM sections WHERE name = 'Complexidade de Algoritmos'), NULL, 'Análise de Algoritmos', 'Discussão sobre complexidade', false),
+    ((SELECT id FROM sections WHERE name = 'Complexidade de Algoritmos'), NULL, 'Exercícios', 'Exercícios resolvidos', false),
+    ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), NULL, 'Metodologia', 'Discussão sobre métodos científicos', false),
+    ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), NULL, 'Publicações', 'Compartilhamento de artigos', false)
   `);
 
   // Insert subcategories
   await pgm.sql(`
+    -- Experiência Criativa
     INSERT INTO categories (section_id, parent_id, name, description, is_subfolder) VALUES
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'Lounge'), 'Introduction', 'Introduce yourself to the community', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'Lounge'), 'Off-topic', 'Non-technical discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'Tech News'), 'Startups', 'Startup and entrepreneurship news', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'Tech News'), 'Gadgets', 'Gadget and hardware news', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'International Lounge'), 'Russian', 'Russian language discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'International Lounge'), 'Spanish', 'Spanish language discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'International Lounge'), 'Indian', 'Indian language discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'International Lounge'), 'Italian', 'Italian language discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'International Lounge'), 'French', 'French language discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Main'), (SELECT id FROM categories WHERE name = 'International Lounge'), 'Portuguese', 'Portuguese language discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), (SELECT id FROM categories WHERE name = 'Languages & Frameworks'), 'Python', 'Python programming discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), (SELECT id FROM categories WHERE name = 'Languages & Frameworks'), 'JavaScript', 'JavaScript programming discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), (SELECT id FROM categories WHERE name = 'Languages & Frameworks'), 'Java', 'Java programming discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), (SELECT id FROM categories WHERE name = 'Languages & Frameworks'), 'C#', 'C# programming discussions', true),
-    ((SELECT id FROM sections WHERE name = 'Software Development'), (SELECT id FROM categories WHERE name = 'Languages & Frameworks'), 'Other Languages', 'Other programming languages', true),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), (SELECT id FROM categories WHERE name = 'DevOps'), 'CI/CD', 'Continuous Integration/Continuous Deployment', true),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), (SELECT id FROM categories WHERE name = 'DevOps'), 'Containers', 'Containers and orchestration', true),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), (SELECT id FROM categories WHERE name = 'Cloud Lounge'), 'AWS', 'Amazon Web Services', true),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), (SELECT id FROM categories WHERE name = 'Cloud Lounge'), 'Azure', 'Microsoft Azure', true),
-    ((SELECT id FROM sections WHERE name = 'Cloud & DevOps'), (SELECT id FROM categories WHERE name = 'Cloud Lounge'), 'Google Cloud', 'Google Cloud Platform', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Marketplace Discussion'), 'Deal disputes', 'Resolve marketplace disputes', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Sellers Marketplace'), 'Products', 'Physical and digital products for sale', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Sellers Marketplace'), 'Services', 'Services offered by sellers', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Sellers Marketplace'), 'Consulting', 'Consulting services offered', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Sellers Marketplace'), 'Accounts', 'Accounts for sale', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Sellers Marketplace'), 'E-books/Guides/Mentorships', 'Educational content for sale', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Sellers Marketplace'), 'Exchange', 'Currency and crypto exchange services', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Buyers Marketplace'), 'Services', 'Services requested by buyers', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Buyers Marketplace'), 'Accounts', 'Accounts requested by buyers', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Buyers Marketplace'), 'Hiring', 'Job opportunities and hiring requests', true),
-    ((SELECT id FROM sections WHERE name = 'MarketPlace'), (SELECT id FROM categories WHERE name = 'Buyers Marketplace'), 'Others', 'Other buying requests', true)
+      ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), (SELECT id FROM categories WHERE name = 'Projetos'), 'Ideias em Andamento', 'Projetos em desenvolvimento', true),
+      ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), (SELECT id FROM categories WHERE name = 'Projetos'), 'Projetos Concluídos', 'Projetos finalizados', true),
+      ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), (SELECT id FROM categories WHERE name = 'Projetos'), 'Colaborações', 'Busque ou ofereça colaboração', true),
+      ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), (SELECT id FROM categories WHERE name = 'Discussões Gerais'), 'Inspirações', 'Compartilhe fontes de inspiração', true),
+      ((SELECT id FROM sections WHERE name = 'Experiência Criativa'), (SELECT id FROM categories WHERE name = 'Discussões Gerais'), 'Ferramentas Criativas', 'Sugestões de ferramentas', true),
+
+    -- Resolução de Problemas com Grafos
+      ((SELECT id FROM sections WHERE name = 'Resolução de Problemas com Grafos'), (SELECT id FROM categories WHERE name = 'Teoria dos Grafos'), 'Algoritmos Clássicos', 'Discussão sobre algoritmos clássicos', true),
+      ((SELECT id FROM sections WHERE name = 'Resolução de Problemas com Grafos'), (SELECT id FROM categories WHERE name = 'Teoria dos Grafos'), 'Propriedades de Grafos', 'Estudo das propriedades', true),
+      ((SELECT id FROM sections WHERE name = 'Resolução de Problemas com Grafos'), (SELECT id FROM categories WHERE name = 'Aplicações'), 'Grafos em Redes', 'Aplicações em redes', true),
+      ((SELECT id FROM sections WHERE name = 'Resolução de Problemas com Grafos'), (SELECT id FROM categories WHERE name = 'Aplicações'), 'Grafos em IA', 'Aplicações em inteligência artificial', true),
+
+    -- Métodos Quantitativos de Computação
+      ((SELECT id FROM sections WHERE name = 'Métodos Quantitativos de Computação'), (SELECT id FROM categories WHERE name = 'Estudos de Caso'), 'Modelagem Matemática', 'Modelos matemáticos aplicados', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos Quantitativos de Computação'), (SELECT id FROM categories WHERE name = 'Estudos de Caso'), 'Simulações', 'Simulações computacionais', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos Quantitativos de Computação'), (SELECT id FROM categories WHERE name = 'Ferramentas'), 'Softwares Estatísticos', 'Ferramentas para análise estatística', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos Quantitativos de Computação'), (SELECT id FROM categories WHERE name = 'Ferramentas'), 'Linguagens de Programação', 'Linguagens usadas em métodos quantitativos', true),
+
+    -- Complexidade de Algoritmos
+      ((SELECT id FROM sections WHERE name = 'Complexidade de Algoritmos'), (SELECT id FROM categories WHERE name = 'Análise de Algoritmos'), 'Algoritmos P vs NP', 'Discussão sobre P vs NP', true),
+      ((SELECT id FROM sections WHERE name = 'Complexidade de Algoritmos'), (SELECT id FROM categories WHERE name = 'Análise de Algoritmos'), 'Algoritmos Aproximados', 'Estudo de algoritmos aproximados', true),
+      ((SELECT id FROM sections WHERE name = 'Complexidade de Algoritmos'), (SELECT id FROM categories WHERE name = 'Exercícios'), 'Desafios Semanais', 'Exercícios propostos semanalmente', true),
+      ((SELECT id FROM sections WHERE name = 'Complexidade de Algoritmos'), (SELECT id FROM categories WHERE name = 'Exercícios'), 'Resoluções Comentadas', 'Resoluções detalhadas', true),
+
+    -- Métodos de Pesquisa Científica
+      ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), (SELECT id FROM categories WHERE name = 'Metodologia'), 'Revisão Bibliográfica', 'Discussão sobre revisão de literatura', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), (SELECT id FROM categories WHERE name = 'Metodologia'), 'Métodos Qualitativos', 'Discussão sobre métodos qualitativos', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), (SELECT id FROM categories WHERE name = 'Metodologia'), 'Métodos Quantitativos', 'Discussão sobre métodos quantitativos', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), (SELECT id FROM categories WHERE name = 'Publicações'), 'Artigos Recentes', 'Compartilhamento de artigos recentes', true),
+      ((SELECT id FROM sections WHERE name = 'Métodos de Pesquisa Científica'), (SELECT id FROM categories WHERE name = 'Publicações'), 'Eventos e Conferências', 'Divulgação de eventos científicos', true)
   `);
 
   // Insert tags
   await pgm.sql(`
     INSERT INTO tags (name) VALUES
-    ('Accepted'),
-    ('Denied'),
-    ('Web'),
-    ('Network'),
-    ('Cloud'),
-    ('Open'),
-    ('Closed')
+      ('Teórico'),
+      ('Prático'),
+      ('Dúvida'),
+      ('Tutorial'),
+      ('Exemplo'),
+      ('Resolução'),
+      ('Colaboração'),
+      ('Revisado'),
+      ('Em andamento'),
+      ('Finalizado'),
+      ('Publicação'),
+      ('Exercício')
   `);
 
   // Associate tags with categories
-  await pgm.sql(`
+await pgm.sql(`
+    -- Experiência Criativa
     INSERT INTO category_tags (category_id, tag_id) VALUES
-    ((SELECT id FROM categories WHERE name = 'Feedback and Suggestions'), (SELECT id FROM tags WHERE name = 'Accepted')),
-    ((SELECT id FROM categories WHERE name = 'Feedback and Suggestions'), (SELECT id FROM tags WHERE name = 'Denied')),
-    ((SELECT id FROM categories WHERE name = 'Cloud Tutorials'), (SELECT id FROM tags WHERE name = 'Cloud')),
-    ((SELECT id FROM categories WHERE name = 'Marketplace Discussion'), (SELECT id FROM tags WHERE name = 'Open')),
-    ((SELECT id FROM categories WHERE name = 'Marketplace Discussion'), (SELECT id FROM tags WHERE name = 'Closed'))
+      ((SELECT id FROM categories WHERE name = 'Ideias em Andamento'), (SELECT id FROM tags WHERE name = 'Em andamento')),
+      ((SELECT id FROM categories WHERE name = 'Ideias em Andamento'), (SELECT id FROM tags WHERE name = 'Colaboração')),
+      ((SELECT id FROM categories WHERE name = 'Projetos Concluídos'), (SELECT id FROM tags WHERE name = 'Finalizado')),
+      ((SELECT id FROM categories WHERE name = 'Projetos Concluídos'), (SELECT id FROM tags WHERE name = 'Revisado')),
+      ((SELECT id FROM categories WHERE name = 'Colaborações'), (SELECT id FROM tags WHERE name = 'Colaboração')),
+      ((SELECT id FROM categories WHERE name = 'Inspirações'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Ferramentas Criativas'), (SELECT id FROM tags WHERE name = 'Tutorial')),
+
+    -- Resolução de Problemas com Grafos
+      ((SELECT id FROM categories WHERE name = 'Algoritmos Clássicos'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Algoritmos Clássicos'), (SELECT id FROM tags WHERE name = 'Exemplo')),
+      ((SELECT id FROM categories WHERE name = 'Propriedades de Grafos'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Grafos em Redes'), (SELECT id FROM tags WHERE name = 'Prático')),
+      ((SELECT id FROM categories WHERE name = 'Grafos em Redes'), (SELECT id FROM tags WHERE name = 'Exemplo')),
+      ((SELECT id FROM categories WHERE name = 'Grafos em IA'), (SELECT id FROM tags WHERE name = 'Prático')),
+
+    -- Métodos Quantitativos de Computação
+      ((SELECT id FROM categories WHERE name = 'Modelagem Matemática'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Modelagem Matemática'), (SELECT id FROM tags WHERE name = 'Tutorial')),
+      ((SELECT id FROM categories WHERE name = 'Simulações'), (SELECT id FROM tags WHERE name = 'Prático')),
+      ((SELECT id FROM categories WHERE name = 'Simulações'), (SELECT id FROM tags WHERE name = 'Exemplo')),
+      ((SELECT id FROM categories WHERE name = 'Softwares Estatísticos'), (SELECT id FROM tags WHERE name = 'Tutorial')),
+      ((SELECT id FROM categories WHERE name = 'Softwares Estatísticos'), (SELECT id FROM tags WHERE name = 'Prático')),
+      ((SELECT id FROM categories WHERE name = 'Linguagens de Programação'), (SELECT id FROM tags WHERE name = 'Tutorial')),
+
+    -- Complexidade de Algoritmos
+      ((SELECT id FROM categories WHERE name = 'Algoritmos P vs NP'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Algoritmos P vs NP'), (SELECT id FROM tags WHERE name = 'Dúvida')),
+      ((SELECT id FROM categories WHERE name = 'Algoritmos Aproximados'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Desafios Semanais'), (SELECT id FROM tags WHERE name = 'Exercício')),
+      ((SELECT id FROM categories WHERE name = 'Desafios Semanais'), (SELECT id FROM tags WHERE name = 'Resolução')),
+      ((SELECT id FROM categories WHERE name = 'Resoluções Comentadas'), (SELECT id FROM tags WHERE name = 'Resolução')),
+
+    -- Métodos de Pesquisa Científica
+      ((SELECT id FROM categories WHERE name = 'Revisão Bibliográfica'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Revisão Bibliográfica'), (SELECT id FROM tags WHERE name = 'Revisado')),
+      ((SELECT id FROM categories WHERE name = 'Métodos Qualitativos'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Métodos Quantitativos'), (SELECT id FROM tags WHERE name = 'Teórico')),
+      ((SELECT id FROM categories WHERE name = 'Artigos Recentes'), (SELECT id FROM tags WHERE name = 'Publicação')),
+      ((SELECT id FROM categories WHERE name = 'Artigos Recentes'), (SELECT id FROM tags WHERE name = 'Revisado')),
+      ((SELECT id FROM categories WHERE name = 'Eventos e Conferências'), (SELECT id FROM tags WHERE name = 'Publicação'))
   `);
+
 };
 
 // eslint-disable-next-line no-unused-vars
