@@ -58,7 +58,7 @@ const ForumSummary: React.FC = () => {
         <>
           <nav className="mb-6">
             <div className="bg-gray-900/80 rounded-lg p-2">
-              <ul className="flex flex-wrap gap-2">
+              <ul className="flex w-full justify-between">
                 {sections.map((section) => (
                   <li key={section.id}>
                     <button
