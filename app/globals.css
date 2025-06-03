@@ -113,6 +113,15 @@
   @apply transition-all duration-200 ease-in-out;
 }
 
+/* Hide scrollbar for horizontal tabs */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
 .spoiler-content {
   filter: blur(5px);
   transition: filter 0.35s ease;
