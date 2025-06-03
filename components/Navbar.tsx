@@ -1,36 +1,32 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { 
+  Home, 
+  Search, 
+  BookOpen, 
+  HelpCircle, 
+  User, 
+  Settings, 
+  LogOut,
+  ChevronDown 
+} from "lucide-react";
 
 const Navbar: React.FC = () => {
   const { data: session } = useSession();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const handleDropdownClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchAvatarUrl = async () => {
@@ -49,78 +45,108 @@ const Navbar: React.FC = () => {
 
     fetchAvatarUrl();
   }, [session]);
-  
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+
+  const navigationItems = [
+    { href: "/", label: "Home", icon: Home },
+    { href: "/search", label: "Search", icon: Search },
+    { href: "/notebook", label: "Your Notebook", icon: BookOpen },
+    { href: "/help", label: "Help", icon: HelpCircle },
+  ];
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      <nav className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex space-x-10">
-            <Link href="/" className="hover:text-blue-300 transition">
-              Home
-            </Link>
-            {/*Search Link will be preserved for now to create a Search bar for Threads after*/}
-            <Link href="/search" className="hover:text-blue-300 transition">
-              Search
-            </Link>
-            <Link href="/notebook" className="hover:text-blue-300 transition">
-              Your Notebook
-            </Link>
-            <Link href="/help" className="hover:text-blue-300 transition">
-              Help
-            </Link>
-          </div>
-   
-          <div className="flex items-center space-x-4">
-            {session?.user && (
-              <div className="relative">
-                <div
-                  className="flex items-center space-x-2 cursor-pointer"
-                  onClick={toggleDropdown}
+    <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
+        <div className="mr-4 hidden md:flex">
+          <Link className="mr-6 flex items-center space-x-2" href="/">
+            <span className="hidden font-bold sm:inline-block">
+              Ava Platform
+            </span>
+          </Link>
+          <nav className="flex items-center gap-6 text-sm">
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-2 transition-colors hover:text-foreground/80 text-foreground/60"
                 >
-                  <Image
-                    src={avatarUrl || "/winter_soldier.gif"}
-                    alt={session.user.name || "User"}
-                    width={32}
-                    height={32}
-                    className="rounded-lg w-7 h-7"
-                  />
-                  <span>{session.user.name}</span>
-                </div>
-                {isDropdownOpen && (
-                  <div
-                    className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg py-1 z-50"
-                    onClick={handleDropdownClick}
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            {/* Mobile menu would go here if needed */}
+          </div>
+          <nav className="flex items-center">
+            {session?.user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage 
+                        src={avatarUrl || "/winter_soldier.gif"} 
+                        alt={session.user.name || "User"} 
+                      />
+                      <AvatarFallback>
+                        {session.user.name?.charAt(0).toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {session.user.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {session.user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href={`/users/${session.user.name}`} className="flex items-center">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings" className="flex items-center">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    className="flex items-center cursor-pointer"
+                    onClick={() => signOut()}
                   >
-                    <Link
-                      href={`/users/${session.user.name}`}
-                      className="block px-4 py-2 text-sm hover:bg-gray-600"
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      href="/settings"
-                      className="block px-4 py-2 text-sm hover:bg-gray-600"
-                    >
-                      Settings
-                    </Link>
-                    <button
-                      onClick={() => signOut()}
-                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-600"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">Sign In</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/register">Sign Up</Link>
+                </Button>
               </div>
             )}
-          </div>
+          </nav>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 };
 
