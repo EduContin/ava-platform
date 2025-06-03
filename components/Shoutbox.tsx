@@ -21,7 +21,9 @@ import {
   X, 
   Check,
   Users,
-  Clock
+  Clock,
+  Maximize2,
+  Minimize2
 } from "lucide-react";
 
 const MAX_MESSAGE_LENGTH = 300;
@@ -45,6 +47,7 @@ const Shoutbox = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const shoutboxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -245,18 +248,36 @@ const Shoutbox = () => {
               </CardDescription>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-muted-foreground" />
-            <Badge variant="outline" className="font-mono">
-              {onlineUsers.length} active
-            </Badge>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-muted-foreground" />
+              <Badge variant="outline" className="font-mono">
+                {onlineUsers.length} active
+              </Badge>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="h-8 w-8 p-0 hover:bg-primary/10 transition-all duration-200"
+            >
+              {isExpanded ? (
+                <Minimize2 className="h-4 w-4" />
+              ) : (
+                <Maximize2 className="h-4 w-4" />
+              )}
+            </Button>
           </div>
         </div>
       </CardHeader>
       
       <CardContent className="p-0">
         {/* Messages Area */}
-        <ScrollArea className="h-96 px-4">
+        <ScrollArea 
+          className={`px-4 transition-all duration-300 ease-in-out ${
+            isExpanded ? 'h-96' : 'h-48'
+          }`}
+        >
           <div className="space-y-3 py-4">
             <AnimatePresence>
               {messages.length > 0 ? (
