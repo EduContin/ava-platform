@@ -15,7 +15,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "setup-admin": "tsx --env-file=.env.development infra/scripts/setupAdmin.ts",
+    "setup-admin": "tsx -r dotenv/config infra/scripts/setupAdmin.ts",
     "migration:create": "node-pg-migrate -m infra/migrations create",
     "migration:up": "node-pg-migrate -m infra/migrations up --envPath .env.development",
     "wait-for-postgres": "ts-node infra/scripts/wait-for-postgres.ts"
