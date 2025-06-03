@@ -3,10 +3,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import customEmojis from "@/models/custom-emojis";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { 
+  MessageCircle, 
+  Send, 
+  Smile, 
+  Edit, 
+  X, 
+  Check,
+  Users,
+  Clock
+} from "lucide-react";
 
 const MAX_MESSAGE_LENGTH = 300;
 
@@ -25,13 +41,10 @@ const Shoutbox = () => {
   const { data: session } = useSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
-  const [socket, setSocket] = useState<Socket<
-    DefaultEventsMap,
-    DefaultEventsMap
-  > | null>(null);
+  const [socket, setSocket] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const shoutboxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -103,7 +116,7 @@ const Shoutbox = () => {
       return userData.avatar_url;
     } catch (error) {
       console.error("Error fetching user avatar:", error);
-      return "/default-avatar.png"; // Provide a default avatar URL
+      return "/default-avatar.png";
     }
   };
 
@@ -121,7 +134,7 @@ const Shoutbox = () => {
             key={index}
             src={emojiUrl}
             alt={part}
-            className="inline-block h-7 w-7"
+            className="inline-block h-5 w-5 mx-0.5"
             width={20}
             height={20}
           />
@@ -211,117 +224,197 @@ const Shoutbox = () => {
 
   const handleEmojiClick = (emoji: string) => {
     setInputMessage((prevMessage) => prevMessage + emoji);
+    setIsEmojiPickerOpen(false);
   };
 
+  const onlineUsers = Array.from(new Set(messages.slice(0, 10).map(msg => msg.username)));
+
   return (
-    <div className="bg-gray-800/90 p-4 rounded-lg shadow-lg mb-2">
-      <h2 className="text-xl font-bold mb-3 text-white">Shoutbox</h2>
-      <div className="h-96 overflow-y-auto mb-3 space-y-1" ref={shoutboxRef}>
-        <AnimatePresence>
-          {messages.length > 0 ? (
-            messages.map((msg) => (
-              <motion.div
-                key={msg.id}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.2 }}
-                className="bg-gray-900 py-2 px-2 rounded-lg"
-              >
-                <div className="flex items-start">
-                  <a href={`/users/${msg.username}`} className="flex-shrink-0">
-                    <Image
-                      src={msg.avatar_url || "/winter_soldier.gif"}
-                      alt="Profile"
-                      className="h-7 w-7 mr-2 rounded-lg"
-                      width={28}
-                      height={28}
-                    />
-                  </a>
-                  <a
-                    href={`/users/${msg.username}`}
-                    className="text-sm mr-1 text-right mt-1 flex-shrink-0"
-                    style={{
-                      width: `${msg.username.length * 8}px`,
-                      minWidth: "100px",
-                      display: "inline-block",
-                    }}
-                  >
-                    {msg.username}
-                  </a>
-                  <div className="mt-1 pl-4 flex-grow overflow-hidden">
-                    <p className="text-gray-400 text-sm break-words">
-                      {renderMessageWithEmojis(msg.message)}
-                    </p>
-                  </div>
-                  {session && session.user.name === msg.username && (
-                    <button
-                      onClick={() => handleEditMessage(msg.id)}
-                      className="text-xs text-gray-400 hover:text-blue-400 transition-colors ml-1 flex-shrink-0"
-                    >
-                      Edit
-                    </button>
-                  )}
-                </div>
-              </motion.div>
-            ))
-          ) : (
-            <p className="text-gray-400 text-sm">No messages yet.</p>
-          )}
-        </AnimatePresence>
-      </div>
-      <div className="mt-3 relative flex items-center">
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputMessage}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
-          className="flex-grow p-2 rounded-lg bg-gray-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-          placeholder={
-            editingMessageId ? "Edit your message..." : "Type your message..."
-          }
-          maxLength={MAX_MESSAGE_LENGTH}
-        />
-        <button
-          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          className="p-1.5 pl-2 pr-2 ml-1 bg-gray-600 text-white rounded-lg hover:bg-gray-500 focus:outline-none transition-colors"
-        >
-          😀
-        </button>
-      </div>
-      {showEmojiPicker && (
-        <div className="relative right-0 bottom-full mb-2 bg-gray-800 p-2 rounded-lg shadow-lg">
-          {Object.keys(customEmojis).map((emoji) => (
-            <button
-              key={emoji}
-              onClick={() => handleEmojiClick(emoji)}
-              className="m-1 p-1 hover:bg-gray-700 rounded-lg"
-            >
-              <Image
-                src={customEmojis[emoji]}
-                alt={emoji}
-                className="w-6 h-6"
-                width={0}
-                height={0}
-                unoptimized
-              />
-            </button>
-          ))}
+    <Card className="border-0 bg-gradient-to-br from-card via-card to-muted/20 shadow-xl overflow-hidden">
+      <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 shadow-lg">
+              <MessageCircle className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-xl">Live Shoutbox</CardTitle>
+              <CardDescription className="flex items-center gap-2">
+                <Clock className="h-3 w-3" />
+                Real-time conversations
+              </CardDescription>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-muted-foreground" />
+            <Badge variant="outline" className="font-mono">
+              {onlineUsers.length} active
+            </Badge>
+          </div>
         </div>
-      )}
-      {errorMessage && (
-        <p className="text-red-500 mt-1 text-xs">{errorMessage}</p>
-      )}
-      {editingMessageId && (
-        <button
-          onClick={handleCancelEdit}
-          className="mt-2 px-3 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none transition-colors text-xs"
-        >
-          Cancel
-        </button>
-      )}
-    </div>
+      </CardHeader>
+      
+      <CardContent className="p-0">
+        {/* Messages Area */}
+        <ScrollArea className="h-96 px-4">
+          <div className="space-y-3 py-4">
+            <AnimatePresence>
+              {messages.length > 0 ? (
+                messages.map((msg, index) => (
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    transition={{ duration: 0.3, delay: index * 0.02 }}
+                    className="group relative"
+                  >
+                    <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-all duration-200 border border-transparent hover:border-border/30">
+                      <Avatar className="h-8 w-8 ring-2 ring-background shadow-sm">
+                        <AvatarImage 
+                          src={msg.avatar_url || "/winter_soldier.gif"} 
+                          alt={msg.username}
+                        />
+                        <AvatarFallback className="text-xs font-medium bg-gradient-to-br from-primary/20 to-secondary/20">
+                          {msg.username.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium text-sm text-foreground hover:text-primary transition-colors cursor-pointer">
+                            {msg.username}
+                          </span>
+                          <div className="h-1 w-1 rounded-full bg-muted-foreground/40" />
+                          <span className="text-xs text-muted-foreground">
+                            now
+                          </span>
+                        </div>
+                        <div className="text-sm text-foreground/90 leading-relaxed break-words">
+                          {renderMessageWithEmojis(msg.message)}
+                        </div>
+                      </div>
+                      
+                      {session && session.user.name === msg.username && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditMessage(msg.id)}
+                          className="opacity-0 group-hover:opacity-100 transition-all duration-200 h-7 w-7 p-0 hover:bg-primary/10"
+                        >
+                          <Edit className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="text-center py-12">
+                  <div className="mb-4">
+                    <MessageCircle className="h-12 w-12 text-muted-foreground/50 mx-auto" />
+                  </div>
+                  <p className="text-muted-foreground">No messages yet.</p>
+                  <p className="text-muted-foreground/70 text-sm mt-1">Be the first to start a conversation!</p>
+                </div>
+              )}
+            </AnimatePresence>
+          </div>
+        </ScrollArea>
+
+        {/* Input Area */}
+        <div className="border-t bg-gradient-to-r from-muted/20 to-muted/10 p-4">
+          {editingMessageId && (
+            <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
+              <Edit className="h-3 w-3" />
+              <span>Editing message</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCancelEdit}
+                className="ml-auto h-6 px-2 text-xs"
+              >
+                <X className="h-3 w-3 mr-1" />
+                Cancel
+              </Button>
+            </div>
+          )}
+          
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Input
+                ref={inputRef}
+                type="text"
+                value={inputMessage}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+                className="pr-12 bg-background/50 border-border/50 focus:bg-background transition-all duration-200"
+                placeholder={
+                  editingMessageId ? "Edit your message..." : "Type your message..."
+                }
+                maxLength={MAX_MESSAGE_LENGTH}
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                {inputMessage.length}/{MAX_MESSAGE_LENGTH}
+              </div>
+            </div>
+            
+            <Popover open={isEmojiPickerOpen} onOpenChange={setIsEmojiPickerOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="h-10 w-10 p-0">
+                  <Smile className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-3" align="end">
+                <div className="grid grid-cols-8 gap-2">
+                  {Object.entries(customEmojis).map(([emoji, url]) => (
+                    <Button
+                      key={emoji}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEmojiClick(emoji)}
+                      className="h-8 w-8 p-0 hover:bg-muted rounded-lg"
+                    >
+                      <Image
+                        src={url}
+                        alt={emoji}
+                        className="w-5 h-5"
+                        width={20}
+                        height={20}
+                        unoptimized
+                      />
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+            
+            <Button
+              onClick={editingMessageId ? handleUpdateMessage : handleSendMessage}
+              disabled={!inputMessage.trim() || inputMessage.length > MAX_MESSAGE_LENGTH}
+              className="h-10 px-4 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
+            >
+              {editingMessageId ? (
+                <Check className="h-4 w-4 mr-2" />
+              ) : (
+                <Send className="h-4 w-4 mr-2" />
+              )}
+              {editingMessageId ? "Update" : "Send"}
+            </Button>
+          </div>
+          
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mt-2 p-2 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md"
+            >
+              {errorMessage}
+            </motion.div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
