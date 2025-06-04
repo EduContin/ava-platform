@@ -608,7 +608,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, posts: initialPosts }) => {
     <SessionProviderClient session={session}>
       {thread && thread.title ? (
         <div className="bg-gray-800/90 backdrop-blur-sm rounded-lg p-6 mb-2">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center">
             <h2 className="text-2xl font-bold">{thread.title}</h2>
             {isAdmin && (
               <button

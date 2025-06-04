@@ -28,6 +28,9 @@ const CreateThreadForm: React.FC<CreateThreadFormProps> = ({ categoryId }) => {
     null,
   );
 
+  // Novo estado para definir se a thread é anúncio
+  const [isAd, setIsAd] = useState(false);
+
   const MAX_CHARACTERS = 5000; // Set the maximum character limit
   const CHARACTERS_PER_LINE = 1000; // Set the number of characters per line
   const MAX_TITLE_CHARACTERS = 70;
@@ -240,6 +243,7 @@ const CreateThreadForm: React.FC<CreateThreadFormProps> = ({ categoryId }) => {
           content,
           categoryId,
           userId: session?.user.id,
+          anounts: isAd,
         }),
       });
 
@@ -278,6 +282,18 @@ const CreateThreadForm: React.FC<CreateThreadFormProps> = ({ categoryId }) => {
           {title.length}/{MAX_TITLE_CHARACTERS} characters
         </div>
       </div>
+      <div className="mb-4">
+        <label className="inline-flex items-center">
+          <input
+            type="checkbox"
+            checked={isAd}
+            onChange={(e) => setIsAd(e.target.checked)}
+            className="form-checkbox"
+          />
+          <span className="ml-2">Marcar como anúncio</span>
+        </label>
+      </div>
+      
       <div className="relative mb-4">
         <label htmlFor="content" className="block mb-2">
           Content
