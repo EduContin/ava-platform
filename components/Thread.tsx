@@ -70,6 +70,8 @@ const Thread: React.FC<ThreadProps> = ({ thread, posts: initialPosts }) => {
     null,
   );
   const [isAdmin, setIsAdmin] = useState(false);
+  const[isPinned, setIsPinned] = useState(false);
+
 
   const MAX_CHARACTERS = 5000; // Set the maximum character limit
   const CHARACTERS_PER_LINE = 1000; // Set the number of characters per line
@@ -604,20 +606,116 @@ const Thread: React.FC<ThreadProps> = ({ thread, posts: initialPosts }) => {
     }
   };
 
+  const handlePinned = async() => {
+      if(session?.user?.id){
+        //If Thread is not pinned, clicking the button
+        //will send a POST to add the Thread to PINNED table
+        
+        //Else, the Thread is already pinned, clicking the button
+        //will send a DELETE to remove the Thread from PINNED table
+        if(!isPinned){
+          try{
+            const response = await fetch("/api/v1/pinned", {
+              method: "POST",
+              body : JSON.stringify({
+                user_id : session.user.id,
+                thread_id : thread.id
+              })
+            });
+
+            if (response.ok){
+              console.log("Thread Pinned Successfully!!!");
+              setIsPinned(true);
+            }
+          }
+          catch ( error ){
+            console.error("Failed to Pin Thread");
+          }
+        }
+        else{
+          try{
+            const response = await fetch("/api/v1/pinned", {
+              method: "DELETE",
+              body : JSON.stringify({
+                user_id : session.user.id,
+                thread_id : thread.id
+              })
+            });
+
+            if (response.ok){
+              console.log("Thread Unpinned Successfully!!!");
+              setIsPinned(false);
+            }
+          }
+          catch ( error ){
+            console.error("Failed to Unpin Thread");
+          }
+        }
+      }
+  };
+
+  useEffect(() =>{
+    const fetchPinned = async () => {
+      if(session?.user?.id){
+        try{
+          const user_id = session.user.id;
+          const thread_id = thread.id;
+          const response = await fetch(`/api/v1/pinned?userId=${user_id}&threadId=${thread_id}`);
+          if(response.ok){
+            const data = await response.json();
+            if (data.rows.length > 0){
+              setIsPinned(true);
+            }
+          }
+          //Not expected response
+          else{
+            console.error("Failed to fetch Pinned");
+          }
+        }
+        //Server side error
+        catch ( error ){
+          console.error("Error fetching from Pinned: ", error);
+        }
+      }
+    };
+
+    fetchPinned();
+  }, [session]);
+
   return (
     <SessionProviderClient session={session}>
       {thread && thread.title ? (
         <div className="bg-gray-800/90 backdrop-blur-sm rounded-lg p-6 mb-2">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center">
             <h2 className="text-2xl font-bold">{thread.title}</h2>
+            <div className="flex flex-row space-x-10">
+              <button onClick={handlePinned}
+              className="px-4 py-2 p-2 bg-blue-600 border-none
+              rounded-md cursor-pointer flex items-cente space-x-3
+              hover:bg-blue-800
+              transition-all duration-800 ease-in-out
+              active:scale-105 transform"
+              >
+
+                
+                <img src="/push-pin.png" alt="Button Pin" className={`w-6 h-6 transition-transform
+                 duration-300 ease-in-out ${isPinned ? 'rotate-180' : 'rotate-0'}`}/>
+                <span>{!isPinned? "Pin to Favorites" : "Unpin from Favorites"}</span>
+                
+              </button>
             {isAdmin && (
               <button
                 onClick={handleDeleteThread}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="px-4 py-2 bg-red-600 text-white rounded-md
+                hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400
+                transition-all duration-800 ease-in-out
+                active:scale-105 transform"
               >
                 Delete Thread
               </button>
             )}
+            </div>
+
           </div>
           <p className="text-sm text-gray-400 mb-4">
             Posted by
