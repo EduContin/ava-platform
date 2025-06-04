@@ -13,6 +13,7 @@ interface Thread {
   post_count: number;
   last_post_at: string;
   first_post_likes: number;
+  anounts: boolean;
 }
 
 interface ThreadListProps {
@@ -50,7 +51,14 @@ const timeSinceLastActivity = (lastActivity: string): string => {
 };
 
 const ThreadList: React.FC<ThreadListProps> = ({ threads }) => {
-  if (!threads || threads.length === 0) {
+  const sortedThreads = [...threads].sort((a, b) => {
+    if (a.anounts === b.anounts) {
+      return new Date(b.last_post_at).getTime() - new Date(a.last_post_at).getTime();
+    }
+    return a.anounts ? -1 : 1;
+  });
+
+    if (!sortedThreads || sortedThreads.length === 0) {
     return (
       <div className="bg-gray-800/90 backdrop-blur-sm rounded-lg p-6 mb-2 shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-gray-100">Threads</h2>
@@ -71,13 +79,11 @@ const ThreadList: React.FC<ThreadListProps> = ({ threads }) => {
               <th className="py-3 px-4 bg-gray-700/80">Category</th>
               <th className="py-3 px-4 bg-gray-700/80">Replies</th>
               <th className="py-3 px-4 bg-gray-700/80">Likes</th>
-              <th className="py-3 px-4 bg-gray-700/80 rounded-tr-md">
-                Last Activity
-              </th>
+              <th className="py-3 px-4 bg-gray-700/80 rounded-tr-md">Last Activity</th>
             </tr>
           </thead>
           <tbody>
-            {threads.map((thread) => (
+            {sortedThreads.map((thread) => (
               <tr
                 key={thread.id}
                 className="hover:bg-gray-700/50 transition-colors duration-200"

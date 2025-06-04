@@ -69,21 +69,21 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { title, content, userId, categoryId } = await request.json();
+  const { title, content, userId, categoryId, anounts } = await request.json();
 
   try {
     const result = await database.query({
       text: `
         WITH new_thread AS (
-          INSERT INTO threads (title, user_id, category_id)
-          VALUES ($1, $2, $3)
+          INSERT INTO threads (title, user_id, category_id, anounts)
+          VALUES ($1, $2, $3, $4)
           RETURNING id
         )
         INSERT INTO posts (content, user_id, thread_id)
-        SELECT $4, $2, id FROM new_thread
+        SELECT $5, $2, id FROM new_thread
         RETURNING thread_id
       `,
-      values: [title, userId, categoryId, content],
+      values: [title, userId, categoryId, anounts, content],
     });
 
     const threadId = result.rows[0].thread_id;
