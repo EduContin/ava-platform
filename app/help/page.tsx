@@ -49,91 +49,91 @@ const RuleSection: React.FC<{ title: string; rules: string[] }> = ({
 
 const HelpPage: React.FC = () => {
   const generalRules = [
-    "Site rules are non-negotiable and apply site-wide, including the shoutbox. Violation will result in account termination.",
-    "Malicious activities towards the board are strictly prohibited. This includes, but is not limited to, hacking attempts, DDoS attacks, or any actions intended to disrupt the forum's functionality.",
-    "Fraudulent activities (e.g., carding, government/military data leaks, ransomware) are strictly prohibited.",
-    "Doxing, attempting to harm other members, or infecting/stealing from them is forbidden and will lead to account termination.",
-    "Harassment or stalking of other members will not be tolerated. This includes threats, unwanted contact, and any behavior that could be viewed as menacing or abusive, both online and offline.",
-    "Impersonation of other members or staff is prohibited. Members must not create accounts or use usernames that can be misleading and may impersonate others.",
-    "Multi-accounting and account sharing are prohibited. Creating multiple accounts voids ban appeal rights.",
-    "Abusing stat systems (likes, reputation, vouches) is prohibited and will result in permanent bans and stat wiping.",
-    "Posting child pornography is strictly forbidden and will result in a permanent ban.",
-    "Using temporary accounts to appeal bans in the shoutbox will lead to permanent bans.",
-    "We reserve the right to disable auth keys for abusive behavior without notice.",
-    "Collusion to defraud or take advantage of other members in transactions, including conspiracy to mislead or deceive, is strictly prohibited.",
-    "Members are responsible for safeguarding confidential information, whether shared in private messages or public threads, and should not disclose personal information of others without consent.",
+    "Community guidelines are enforced throughout the platform to maintain a positive learning environment for all students and educators.",
+    "Academic integrity is paramount. Plagiarism, cheating, and dishonest academic practices are strictly prohibited and will result in disciplinary action.",
+    "Respect for all community members is required. Harassment, discrimination, or offensive behavior towards students, teachers, or staff will not be tolerated.",
+    "Privacy and personal information must be protected. Sharing personal details of other users without consent is forbidden.",
+    "Appropriate language and content are expected at all times. Profanity, inappropriate content, or offensive material will be removed.",
+    "Multiple accounts are not permitted. Each student should maintain only one active account on the platform.",
+    "Impersonation of other students, teachers, or staff members is strictly prohibited.",
+    "System abuse, including attempts to hack, spam, or disrupt platform functionality, will result in immediate account suspension.",
+    "Copyright and intellectual property rights must be respected. Unauthorized sharing of copyrighted materials is prohibited.",
+    "Students are responsible for maintaining the confidentiality of their login credentials and account security.",
+    "False reporting or misuse of the reporting system to harass other users is not allowed.",
+    "Commercial activities and advertising are not permitted unless specifically authorized by the institution.",
+    "Students must follow their institution's code of conduct and academic policies while using this platform.",
   ];
 
   const postingRules = [
-    "Violations can result in warnings or account termination.",
-    "Spam posting, including short replies or emoji-only posts, is prohibited.",
-    "This is an English board. Use the International Lounge for other languages.",
-    "Posting offensive material with intent to harm is prohibited.",
-    "Topics can be bumped once every 24 hours. Asking others to bump for you is not allowed.",
-    "Revenue-generating links ('cashlinks') are prohibited.",
-    "When posting tools, include a VirusTotal scan of all files, not just the archive.",
-    "Vouch copies are for upgraded members only, but thread starters can grant them to anyone.",
-    "Cross-posting in multiple sections is not allowed.",
-    "Thread titles must be relevant to the content.",
-    "You are fully responsible for all content you post.",
-    "Take arguments to private messages.",
-    "Leaking projects currently sold on Alpened is prohibited unless the leak predates the sale.",
-    "Sharing unchecked codes is prohibited.",
-    "Post content in the correct category to avoid punishment.",
-    "BB-Codes are not allowed in titles.",
-    "When posting referral/affiliate links, include non-referral alternatives.",
-    "Begging for donations is not allowed.",
-    "Giveaways must have reasonable timeframes for winner selection (24h - 7 days) and prize claiming (e.g., 24 hours).",
+    "Violations may result in warnings, content removal, or account restrictions depending on severity.",
+    "Spam posting, including repetitive or irrelevant content, is prohibited across all platform areas.",
+    "Content must be posted in the appropriate course sections or discussion areas to maintain organization.",
+    "Use respectful and constructive language in all communications and discussions.",
+    "Academic discussions should remain on-topic and contribute meaningfully to the learning experience.",
+    "When sharing external links, ensure they are relevant, educational, and from reputable sources.",
+    "Include proper citations and references when sharing academic content or research materials.",
+    "Group project collaborations should be conducted in designated spaces and follow assignment guidelines.",
+    "Cross-posting identical content across multiple courses or sections is discouraged unless relevant.",
+    "Discussion titles should clearly reflect the content and purpose of the post.",
+    "Students are responsible for all content they post and must ensure it meets academic standards.",
+    "Personal disputes should be resolved privately or through appropriate channels, not in public forums.",
+    "Sharing of assignment solutions or exam answers is considered academic dishonesty and is prohibited.",
+    "Content that violates copyright or academic integrity policies will be removed immediately.",
+    "Posts should contribute to the educational environment and support collaborative learning.",
+    "Formatting should be clear and professional to enhance readability and communication.",
+    "When asking for help, provide sufficient context and show evidence of your own efforts first.",
+    "Peer assistance is encouraged, but direct provision of assignment answers is not permitted.",
+    "Course-specific guidelines and posting requirements must be followed for each class.",
   ];
 
-  const marketplaceRules = [
-    "Vouch copy requests are for upgraded members only, but sellers can grant them to anyone.",
-    "Excessive vouch copy requesting may result in suspension.",
-    "'Proxy selling' (selling for others) and cross-posting are prohibited.",
-    "All sales threads must be in the marketplace section.",
-    "Fraud-related sales threads are prohibited.",
-    "Marketplace threads can be bumped once every 24 hours.",
-    "Only Alpened team members can provide middleman services.",
-    "Sales trashing is prohibited. Warn of scammers only with proof.",
-    "Vouches from other forums are not valid here.",
-    "Vouch copy recipients must leave product reviews.",
-    "TOS may be ignored in scam reports at Alpened team's discretion.",
-    "Selling free public services/products is not allowed.",
-    "Only upgraded members can advertise in the marketplace.",
-    "Publishing cracked versions of marketplace tools is prohibited.",
-    "Posting in deal disputes you're not involved in will result in warnings.",
+  const collaborationRules = [
+    "Group work and peer collaboration are encouraged within the guidelines set by individual courses.",
+    "Requests for study groups should be made in appropriate course sections or designated collaboration areas.",
+    "Academic assistance should focus on understanding concepts rather than providing direct answers.",
+    "All collaborative work must comply with individual course policies regarding group assignments.",
+    "Peer tutoring and study sessions should be conducted in accordance with institutional guidelines.",
+    "Sharing of course materials should only occur as permitted by instructors and institutional policy.",
+    "Students should respect intellectual property when collaborating on projects and assignments.",
+    "Group project coordination should use designated platform tools and communication channels.",
+    "Collaborative discussions should maintain focus on educational objectives and learning outcomes.",
+    "Peer feedback should be constructive, respectful, and aimed at supporting academic growth.",
+    "Study material exchanges must comply with copyright laws and course-specific sharing policies.",
+    "Online study sessions should be conducted in appropriate virtual spaces provided by the platform.",
+    "Academic integrity must be maintained in all collaborative activities and group work.",
+    "Resource sharing should prioritize educational value and support learning objectives.",
+    "Cross-course collaboration should be approved by relevant instructors when appropriate.",
   ];
 
-  const shoutboxRules = [
-    "All forum rules apply to the shoutbox.",
-    "Buying/selling/trading and account requests are forbidden in the shoutbox.",
-    "Do not post accounts or items in the shoutbox.",
-    "Take extended arguments to private messages.",
-    "Do not PM staff about ban removals; bans will not be reversed.",
-    "Asking for likes/reputation/vouches in the shoutbox is prohibited.",
-    "Do not spam or use scripts for spamming in the shoutbox.",
-    "Posting download links in the shoutbox is not allowed.",
-    "BBCodes are not allowed in the shoutbox.",
-    "The shoutbox is for casual chat, not for asking help.",
-    "Avoid excessive use of capital letters.",
-    "English is the only allowed language in the shoutbox.",
-    "Asking or paying others to post on your behalf in the Shoutbox marketplace will result in shop blacklisting.",
+  const communicationRules = [
+    "All platform communication guidelines apply to messaging, forums, and live chat features.",
+    "Academic discussions should remain professional and focused on educational content.",
+    "Personal conversations should be kept to private messaging when appropriate.",
+    "Extended debates or disagreements should be moved to private channels or resolved with instructor guidance.",
+    "Inappropriate use of communication features may result in restricted access to these tools.",
+    "Requests for academic help should be directed to appropriate channels (instructor, TA, or designated help forums).",
+    "Spam messaging, excessive notifications, or communication abuse is strictly prohibited.",
+    "Course announcements and important communications should not be obscured by casual conversation.",
+    "Professional language standards should be maintained in all course-related communications.",
+    "Emergency or urgent academic matters should be communicated through proper institutional channels.",
+    "Communication should support the learning environment and respect all participants' time and focus.",
+    "Language other than the course instruction language should be used only when specifically permitted.",
+    "Voice and video communication should follow the same respectful guidelines as text-based interaction.",
   ];
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-4 md:p-8">
       <Head>
-        <title>Alpened - Help & Information</title>
+        <title>AVA Platform - Help & Information</title>
         <meta
           name="description"
-          content="Help and information for Alpened forum"
+          content="Help and information for AVA learning platform"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-8 text-blue-400">
-          Welcome to Alpened
+          Welcome to AVA Learning Platform
         </h1>
 
         <nav className="mb-8 p-4 bg-gray-800 rounded-lg">
@@ -143,7 +143,7 @@ const HelpPage: React.FC = () => {
           <ul className="space-y-2">
             <li>
               <a href="#about-us" className="text-blue-300 hover:underline">
-                About Us
+                About Our Platform
               </a>
             </li>
             <li>
@@ -151,7 +151,7 @@ const HelpPage: React.FC = () => {
                 href="#general-rules"
                 className="text-blue-300 hover:underline"
               >
-                General Rules
+                Community Guidelines
               </a>
             </li>
             <li>
@@ -159,77 +159,76 @@ const HelpPage: React.FC = () => {
                 href="#posting-rules"
                 className="text-blue-300 hover:underline"
               >
-                Posting Rules
+                Content Guidelines
               </a>
             </li>
             <li>
               <a
-                href="#marketplace-rules"
+                href="#collaboration-rules"
                 className="text-blue-300 hover:underline"
               >
-                Marketplace Rules
+                Collaboration Guidelines
               </a>
             </li>
             <li>
               <a
-                href="#shoutbox-rules"
+                href="#communication-rules"
                 className="text-blue-300 hover:underline"
               >
-                Shoutbox Rules
+                Communication Guidelines
               </a>
             </li>
           </ul>
         </nav>
 
-        <section id="about-us" className="mb-8 p-4 bg-gray-800 rounded-lg">
+        <section id="about-us" className="mb-8 bg-gray-800 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4 text-blue-400">
-            About Us
+            About Our Platform
           </h2>
           <p className="text-gray-300 mb-4">
-            Alpened is a dedicated forum for individuals interested in blackhat
-            hacking, offering a unique space for hackers of all skill levels,
-            including whitehat, greyhat, and blackhat. Our mission is to foster
-            a vibrant community where members can learn, share knowledge, and
-            enjoy the camaraderie of like-minded individuals.
+            AVA (Virtual Learning Environment) is a comprehensive educational platform designed to facilitate 
+            effective online learning and collaboration between students, educators, and academic institutions. 
+            Our mission is to create an engaging, accessible, and supportive digital learning environment that 
+            enhances educational outcomes for learners of all levels.
           </p>
           <p className="text-gray-300 mb-4">
-            We cover a wide range of topics, including but not limited to:
+            Our platform supports a wide range of educational activities and features:
           </p>
           <ul className="list-disc list-inside text-gray-300 mb-4">
-            <li>Cracking tutorials and tools</li>
-            <li>Hacking methodologies</li>
-            <li>Coding and programming insights</li>
-            <li>Exposure of leaks and monetization strategies</li>
-            <li>Social engineering tactics</li>
-            <li>Cryptocurrency discussions</li>
-            <li>Real-life business practices</li>
+            <li>Interactive course content and multimedia resources</li>
+            <li>Collaborative project spaces and group work tools</li>
+            <li>Discussion forums for academic discourse</li>
+            <li>Assignment submission and feedback systems</li>
+            <li>Virtual classroom and video conferencing capabilities</li>
+            <li>Progress tracking and assessment tools</li>
+            <li>Peer-to-peer learning and study group formation</li>
+            <li>Academic resource sharing and library integration</li>
+            <li>Mobile-friendly access for learning on-the-go</li>
           </ul>
           <p className="text-gray-300 mb-4">
-            As we grow, Alpened aims to implement additional features like an
-            integrated shop for buying and selling, an automatic MiddleMan
-            system to ensure secure transactions, and a casual casino for
-            members to enjoy.
+            As our platform continues to evolve, we aim to implement advanced features such as 
+            AI-powered learning recommendations, integrated academic integrity tools, enhanced 
+            accessibility features, and seamless integration with institutional systems.
           </p>
           <p className="text-gray-300">
-            Committed to a safe and enjoyable environment, we take moderation
-            seriously, maintaining a respectful and secure community where
-            everyone can contribute positively. We encourage all members to
-            follow our rules and foster an inclusive atmosphere for all
-            participants.
+            We are committed to maintaining a safe, inclusive, and academically rigorous environment 
+            where all members of our learning community can thrive. Our dedicated support team and 
+            robust moderation systems ensure that our platform remains focused on educational excellence 
+            and positive learning experiences for everyone.
           </p>
         </section>
 
-        <section className="mb-8">
+        <section id="general-rules" className="mb-8 bg-gray-800 p-6 rounded-lg">
           <h2
             id="general-rules"
             className="text-2xl font-semibold mb-4 text-blue-400"
           >
-            Forum Rules
+            Platform Guidelines
           </h2>
-          <RuleSection title="General Rules" rules={generalRules} />
-          <RuleSection title="Posting Rules" rules={postingRules} />
-          <RuleSection title="Marketplace Rules" rules={marketplaceRules} />
-          <RuleSection title="Shoutbox Rules" rules={shoutboxRules} />
+          <RuleSection title="Community Guidelines" rules={generalRules} />
+          <RuleSection title="Content Guidelines" rules={postingRules} />
+          <RuleSection title="Collaboration Guidelines" rules={collaborationRules} />
+          <RuleSection title="Communication Guidelines" rules={communicationRules} />
         </section>
 
         <section className="mb-8 bg-gray-800 p-6 rounded-lg">
@@ -238,33 +237,33 @@ const HelpPage: React.FC = () => {
           </h2>
           <ol className="list-decimal list-inside text-gray-300">
             <li>
-              Alpened reserves the right to change the Terms of Service at any
-              time without warning.
+              The institution reserves the right to modify these Terms of Service 
+              with appropriate notice to users.
             </li>
             <li>
-              All content posted within the forum falls under Alpened&apos;s
-              domain, and we retain rights over it.
+              All educational content and user contributions are subject to institutional 
+              academic policies and intellectual property guidelines.
             </li>
             <li>
-              Alpened reserves the right to ban users without further warning at
-              any time.
-            </li>
-            <li>Illegal content is strictly prohibited.</li>
-            <li>
-              Failure to follow the rules will result in a ban and permanent
-              loss of access to all forum features.
+              The institution reserves the right to suspend or terminate user accounts 
+              for violations of academic integrity or platform guidelines.
             </li>
             <li>
-              Users are responsible for maintaining the security of their
-              accounts.
+              Content that violates academic standards or institutional policies is prohibited.</li>
+            <li>
+              Failure to comply with academic integrity policies may result in 
+              disciplinary action according to institutional procedures.
             </li>
             <li>
-              Alpened is not responsible for any losses incurred through
-              transactions or activities on the forum.
+              Users are responsible for maintaining the security and appropriate use of their accounts.
             </li>
             <li>
-              By using Alpened, you agree to comply with all applicable laws and
-              regulations.
+              The institution is not liable for academic or personal losses that may occur 
+              through platform use, though we strive to provide reliable service.
+            </li>
+            <li>
+              By using this platform, users agree to comply with all applicable educational 
+              policies and local regulations.
             </li>
           </ol>
         </section>
@@ -274,18 +273,17 @@ const HelpPage: React.FC = () => {
             Contact Us
           </h2>
           <p className="text-gray-300">
-            For any inquiries, please contact us at:{" "}
+            For technical support, academic assistance, or general inquiries, please contact us at:{" "}
             <a
-              href="mailto:alpened@proton.me"
+              href="mailto:support@ava-platform.edu"
               className="text-blue-400 hover:underline"
             >
-              alpened@proton.me
+              support@ava-platform.edu
             </a>
           </p>
           <p className="mt-4 p-4 bg-blue-900 text-gray-300 rounded-lg italic">
-            Important: For security reasons, please avoid including sensitive
-            information in the email subject line. Be discreet, as proton.me
-            does not encrypt email titles.
+            For urgent academic matters or emergency situations, please contact your 
+            instructor directly or use your institution's emergency communication channels.
           </p>
         </section>
       </main>
