@@ -243,7 +243,7 @@ const CreateThreadForm: React.FC<CreateThreadFormProps> = ({ categoryId }) => {
           content,
           categoryId,
           userId: session?.user.id,
-          anounts: isAd,
+          announcements: isAd,
         }),
       });
 

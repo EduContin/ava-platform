@@ -3,7 +3,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 import {
   Alert,
@@ -34,21 +34,10 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [showExchangeInfo, setShowExchangeInfo] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [referralCode, setReferralCode] = useState("");
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const ref = searchParams.get("ref");
-    if (ref) {
-      setReferralCode(ref);
-    }
-  }, [searchParams]);
+  const router = useRouter();
 
   const validateForm = () => {
     if (!username.trim() || !email.trim() || !password.trim()) {
@@ -90,14 +79,16 @@ export default function RegisterForm() {
         body: JSON.stringify({
           username,
           email,
-          password,
-          referralCode,
+          password
         }),
       });
 
       if (response.ok) {
         setIsSuccess(true);
-        setShowSuccessMessage(true);
+        //Sending automatically to the login page, doesnt give the time
+        //for the message o sucessful registration
+        //router.push("/login")
+        
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Registration failed");
@@ -210,169 +201,12 @@ export default function RegisterForm() {
               </Link>
             </p>
           </main>
-
-          <Dialog
-            open={showExchangeInfo}
-            onClose={() => setShowExchangeInfo(false)}
-            maxWidth="md"
-            fullWidth
-            PaperProps={{
-              style: {
-                backgroundColor: "#1f2937",
-                color: "#e5e7eb",
-              },
-            }}
-          >
-            <DialogTitle className="text-2xl font-bold text-white">
-              How to Get Bitcoin (BTC) or Litecoin (LTC) using FixedFloat
-            </DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" className="mb-4 text-white">
-                Use a fast and reliable cryptocurrency exchange platform to
-                exchange your current cryptos to BTC or LTC:
-              </Typography>
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowForward className="text-blue-500" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span className="text-white">
-                        1. Visit our recommended exchange platform (you can
-                        create an account)
-                      </span>
-                    }
-                    secondary={
-                      <MuiLink
-                        href={FIXED_FLOAT_AFFILIATE_LINK}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400"
-                      >
-                        Click here to go to FixedFloat
-                      </MuiLink>
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowForward className="text-blue-500" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span className="text-white">
-                        2. Select Exchange Pair
-                      </span>
-                    }
-                    secondary={
-                      <span className="text-slate-300">
-                        Choose the cryptocurrency you want to exchange (e.g.,
-                        ETH, XRP) as the &apos;You Send&apos; currency, and
-                        select BTC or LTC as the &apos;You Get&apos; currency.
-                      </span>
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowForward className="text-blue-500" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span className="text-white">3. Enter Amount</span>
-                    }
-                    secondary={
-                      <span className="text-slate-300">
-                        Specify the amount you want to exchange. Make sure
-                        it&apos;s enough to cover the 8 XMR registration fee
-                        plus any transaction fees.
-                      </span>
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowForward className="text-blue-500" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span className="text-white">
-                        4. Provide BTC or LTC Receiving Address
-                      </span>
-                    }
-                    secondary={
-                      <span className="text-slate-300">
-                        Enter your BTC or LTC wallet address where you want to
-                        receive the exchanged Bitcoin or Litecoin.
-                      </span>
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowForward className="text-blue-500" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span className="text-white">
-                        5. Complete the Exchange
-                      </span>
-                    }
-                    secondary={
-                      <span className="text-slate-300">
-                        Follow the instructions to send your cryptocurrency to
-                        the provided FixedFloat address. The exchange will
-                        process automatically.
-                      </span>
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowForward className="text-blue-500" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <span className="text-white">6. Receive BTC or LTC</span>
-                    }
-                    secondary={
-                      <span className="text-slate-300">
-                        Once the exchange is complete, you&apos;ll receive the
-                        BTC or LTC in your specified wallet address.
-                      </span>
-                    }
-                  />
-                </ListItem>
-              </List>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => setShowExchangeInfo(false)}
-                className="text-slate-300"
-              >
-                Close
-              </Button>
-              <Button
-                onClick={() =>
-                  window.open(FIXED_FLOAT_AFFILIATE_LINK, "_blank")
-                }
-                variant="contained"
-                color="primary"
-              >
-                Go to Exchange
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          {showSuccessMessage && (
             <Snackbar
-              open={showSuccessMessage}
-              autoHideDuration={6000}
-              onClose={() => setShowSuccessMessage(false)}
+              open={isSuccess}
+              autoHideDuration={3000}
+              onClose={() => setIsSuccess(false)}
               message="Registration successful! Please check your email to verify your account."
             />
-          )}
         </div>
       </div>
     </Suspense>

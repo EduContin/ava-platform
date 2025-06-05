@@ -686,12 +686,12 @@ const Thread: React.FC<ThreadProps> = ({ thread, posts: initialPosts }) => {
     <SessionProviderClient session={session}>
       {thread && thread.title ? (
         <div className="bg-gray-800/90 backdrop-blur-sm rounded-lg p-6 mb-2">
-          <div className="flex items-center">
+          <div className="flex items-center w-full justify-between">
             <h2 className="text-2xl font-bold">{thread.title}</h2>
-            <div className="flex flex-row space-x-10">
+            <div className="flex flex-row align-right space-x-10">
               <button onClick={handlePinned}
               className="px-4 py-2 p-2 bg-blue-600 border-none
-              rounded-md cursor-pointer flex items-cente space-x-3
+              rounded-md cursor-pointer flex items-center space-x-3
               hover:bg-blue-800
               transition-all duration-800 ease-in-out
               active:scale-105 transform"
