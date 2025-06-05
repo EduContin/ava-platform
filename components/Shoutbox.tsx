@@ -233,7 +233,7 @@ const Shoutbox = () => {
   const onlineUsers = Array.from(new Set(messages.slice(0, 10).map(msg => msg.username)));
 
   return (
-    <Card className="border-0 bg-gradient-to-br from-card via-card to-muted/20 shadow-xl overflow-hidden">
+    <Card className="mb-8 border-0 bg-gradient-to-br from-card via-card to-muted/20 shadow-xl overflow-hidden">
       <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
