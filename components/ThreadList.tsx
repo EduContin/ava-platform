@@ -13,7 +13,7 @@ interface Thread {
   post_count: number;
   last_post_at: string;
   first_post_likes: number;
-  anounts: boolean;
+  announcements: boolean;
 }
 
 interface ThreadListProps {
@@ -52,10 +52,10 @@ const timeSinceLastActivity = (lastActivity: string): string => {
 
 const ThreadList: React.FC<ThreadListProps> = ({ threads }) => {
   const sortedThreads = [...threads].sort((a, b) => {
-    if (a.anounts === b.anounts) {
+    if (a.announcements === b.announcements) {
       return new Date(b.last_post_at).getTime() - new Date(a.last_post_at).getTime();
     }
-    return a.anounts ? -1 : 1;
+    return a.announcements ? -1 : 1;
   });
 
     if (!sortedThreads || sortedThreads.length === 0) {

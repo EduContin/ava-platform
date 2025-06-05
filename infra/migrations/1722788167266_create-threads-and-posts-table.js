@@ -26,7 +26,7 @@ exports.up = (pgm) => {
     },
     view_count: { type: "integer", default: 0 },
     status: { type: "varchar(20)", default: "open" },
-    anounts: { type: "boolean", notNull: true, default: false },
+    announcements: { type: "boolean", notNull: true, default: false },
   });
 
   pgm.createTable("posts", {
