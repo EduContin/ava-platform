@@ -24,6 +24,7 @@ interface Thread {
   category_name: string;
   post_count: number;
   last_post_at: string;
+  announcements: boolean;
 }
 
 async function getLatestThreads() {
@@ -109,20 +110,21 @@ function RecentTopics() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchThreads = async (showRefreshing = false) => {
-      try {
+    try {
       if (showRefreshing) setIsRefreshing(true);
       else setIsLoading(true);
-      
-        const latestThreads = await getLatestThreads();
-        setThreads(latestThreads);
-        setError(null);
-      } catch (err) {
-        setError("Failed to fetch threads");
-      } finally {
-        setIsLoading(false);
+
+      const latestThreads = await getLatestThreads();
+      const commonThreads = latestThreads.filter((thread: Thread) => !thread.announcements);
+      setThreads(commonThreads);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch threads");
+    } finally {
+      setIsLoading(false);
       setIsRefreshing(false);
-      }
-    };
+    }
+  };
 
   useEffect(() => {
     fetchThreads();
@@ -213,16 +215,16 @@ function RecentTopics() {
                     
                     <div className="flex-1 min-w-0 space-y-1">
                       <Link
-              href={`/thread/${slugify(thread.title)}-${thread.id}`}
+                        href={`/thread/${slugify(thread.title)}-${thread.id}`}
                         className="font-semibold text-foreground hover:text-primary transition-colors duration-200 line-clamp-2 group-hover:underline"
-              title={thread.title}
-            >
-              {limitTitle(thread.title)}
+                        title={thread.title}
+                      >
+                        {limitTitle(thread.title)}
                       </Link>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <User className="h-3 w-3" />
                         <Link
-                href={`/users/${thread.username}`}
+                          href={`/users/${thread.username}`}
                           className="font-medium hover:text-primary transition-colors"
                         >
                           {thread.username}
@@ -260,7 +262,7 @@ function RecentTopics() {
             </div>
             )}
           </AnimatePresence>
-    </div>
+        </div>
       </CardContent>
     </Card>
   );

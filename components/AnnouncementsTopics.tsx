@@ -1,79 +1,101 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Megaphone, 
-  Clock, 
-  User,
-  ExternalLink
-} from "lucide-react";
+import { Megaphone, Clock, User, ExternalLink } from "lucide-react";
+import { slugify } from "@/models/slugify";
 
-const StickyTopics = () => {
-  const stickyTopics = [
-    {
-      id: 1,
-      title: "Forum Rules and Guidelines",
-      username: "Admin",
-      last_post_at: "2023-05-01",
-      post_count: 3,
-    },
-    {
-      id: 2,
-      title: "Frequently Asked Questions",
-      username: "Moderator",
-      last_post_at: "2023-05-15",
-      post_count: 12,
-    },
-    {
-      id: 3,
-      title: "Welcome to the Community!",
-      username: "Admin",
-      last_post_at: "2023-05-20",
-      post_count: 8,
-    },
-    {
-      id: 4,
-      title: "Latest Platform Updates and Features",
-      username: "Developer",
-      last_post_at: "2023-05-25",
-      post_count: 5,
-    },
-  ];
+interface Thread {
+  id: number;
+  title: string;
+  username: string;
+  category_name?: string;
+  post_count: number;
+  last_post_at: string;
+  anounts: boolean;
+}
 
-  const limitTitle = (title: string, maxLength: number = 70): string => {
-    if (title.length > maxLength) {
-      return title.slice(0, maxLength - 3) + "...";
+async function getAnnouncements() {
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const response = await fetch(
+    `${apiUrl}/api/v1/threads?announcements=true&page=1&pageSize=10`,
+    { cache: "no-store" }
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch announcements");
+  }
+  return response.json();
+}
+
+const limitTitle = (title: string, maxLength: number = 70): string => {
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength - 3) + "...";
+  }
+  return title;
+};
+
+const timeSinceLastActivity = (lastActivity: string): string => {
+  const now = new Date();
+  const lastActivityTime = new Date(lastActivity);
+  const delta = now.getTime() - lastActivityTime.getTime();
+
+  const minutes = Math.floor(delta / 60000);
+  const hours = Math.floor(delta / 3600000);
+  const days = Math.floor(delta / 86400000);
+  const months = Math.floor(days / 30);
+
+  if (months >= 1) {
+    return `${months} month${months > 1 ? "s" : ""} ago`;
+  } else if (days >= 1) {
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  } else if (hours >= 1) {
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  } else if (minutes >= 1) {
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+  } else {
+    return "just now";
+  }
+};
+
+const AnnouncementsTopics: React.FC = () => {
+  const [announcements, setAnnouncements] = useState<Thread[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAnnouncements = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getAnnouncements();
+      setAnnouncements(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch announcements");
+    } finally {
+      setIsLoading(false);
     }
-    return title;
   };
 
-  const timeSinceLastActivity = (lastActivity: string): string => {
-    const now = new Date();
-    const lastActivityTime = new Date(lastActivity);
-    const delta = now.getTime() - lastActivityTime.getTime();
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
 
-    const minutes = Math.floor(delta / 60000);
-    const hours = Math.floor(delta / 3600000);
-    const days = Math.floor(delta / 86400000);
-    const months = Math.floor(days / 30);
+  if (isLoading) {
+    return <div>Loading announcements...</div>;
+  } 
 
-    if (months >= 1) {
-      return `${months} month${months > 1 ? "s" : ""} ago`;
-    } else if (days >= 1) {
-      return `${days} day${days > 1 ? "s" : ""} ago`;
-    } else if (hours >= 1) {
-      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-    } else if (minutes >= 1) {
-      return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-    } else {
-      return "just now";
-    }
-  };
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Card className="mb-8 border-0 bg-gradient-to-br from-card via-card to-muted/20 shadow-xl overflow-hidden">
@@ -92,12 +114,13 @@ const StickyTopics = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge 
-              variant="secondary" 
+            <Badge
+              variant="secondary"
               className="font-mono whitespace-nowrap bg-gradient-to-r from-orange-500/10 to-orange-600/10 text-orange-600 border-orange-200/20 hover:from-orange-500/20 hover:to-orange-600/20 transition-all duration-300 shadow-sm"
             >
               <Megaphone className="h-3 w-3 mr-1.5" />
-              {stickyTopics.length} {stickyTopics.length === 1 ? 'topic' : 'topics'}
+              {announcements.length}{" "}
+              {announcements.length === 1 ? "topic" : "topics"}
             </Badge>
           </div>
         </div>
@@ -106,8 +129,8 @@ const StickyTopics = () => {
       <CardContent className="p-0">
         <div className="space-y-1">
           <AnimatePresence>
-            {stickyTopics.length > 0 ? (
-              stickyTopics.map((topic, index) => (
+            {announcements.length > 0 ? (
+              announcements.map((topic, index) => (
                 <motion.div
                   key={topic.id}
                   initial={{ opacity: 0, y: -10, scale: 0.98 }}
@@ -126,7 +149,7 @@ const StickyTopics = () => {
                     
                     <div className="flex-1 min-w-0 space-y-1">
                       <Link
-                        href={`/announcement/${topic.id}`}
+                        href={`/thread/${slugify(topic.title)}-${topic.id}`}
                         className="font-semibold text-foreground hover:text-primary transition-colors duration-200 line-clamp-2 group-hover:underline"
                         title={topic.title}
                       >
@@ -154,7 +177,7 @@ const StickyTopics = () => {
                         {topic.post_count}
                       </Badge>
                       <Link
-                        href={`/announcement/${topic.id}`}
+                        href={`/thread/${slugify(topic.title)}-${topic.id}`}
                         className="opacity-0 group-hover:opacity-100 transition-all duration-200 text-primary hover:scale-110"
                       >
                         <ExternalLink className="h-4 w-4" />
@@ -168,8 +191,12 @@ const StickyTopics = () => {
                 <div className="mb-4">
                   <Megaphone className="h-16 w-16 text-muted-foreground/50 mx-auto" />
                 </div>
-                <p className="text-muted-foreground text-lg">No announcements at this time</p>
-                <p className="text-muted-foreground/70 text-sm mt-2">Important updates will appear here when available</p>
+                <p className="text-muted-foreground text-lg">
+                  No announcements at this time
+                </p>
+                <p className="text-muted-foreground/70 text-sm mt-2">
+                  Important updates will appear here when available
+                </p>
               </div>
             )}
           </AnimatePresence>
@@ -179,4 +206,4 @@ const StickyTopics = () => {
   );
 };
 
-export default StickyTopics;
+export default AnnouncementsTopics;

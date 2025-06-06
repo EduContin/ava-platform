@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
   const categoryId = searchParams.get("categoryId");
   const threadId = searchParams.get("threadId");
   const userId = searchParams.get("userId");
+  const announcementsParam = searchParams.get("announcements"); 
 
   const offset = (page - 1) * pageSize;
 
@@ -39,6 +40,10 @@ export async function GET(request: NextRequest) {
     if (userId) {
       whereConditions.push(`t.user_id = $${queryParams.length + 1}`);
       queryParams.push(userId);
+    }
+
+    if (announcementsParam && announcementsParam.toLowerCase() === "true") {
+      whereConditions.push(`t.announcements = true`);
     }
 
     if (whereConditions.length > 0) {

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { slugify } from "@/models/slugify";
 import { FaComments, FaUser, FaFolder, FaClock, FaHeart } from "react-icons/fa";
 
-// components/ThreadList.tsx
 
 interface Thread {
   id: number;
