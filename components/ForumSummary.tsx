@@ -206,7 +206,7 @@ const ForumSummary: React.FC = () => {
               <div className="text-muted-foreground">Total Threads</div>
             </div>
             <div className="text-center">
-              <div className="font-bold text-lg text-secondary">{totalPosts.toLocaleString()}</div>
+              <div className="font-bold text-lg text-green-600">{totalPosts.toLocaleString()}</div>
               <div className="text-muted-foreground">Total Posts</div>
             </div>
           </div>
