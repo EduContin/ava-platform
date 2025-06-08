@@ -32,8 +32,6 @@ export async function GET(req : NextRequest){
             sections[i].threads = result.rows;
         }
         return NextResponse.json(sections);
-
-<<<<<<< Updated upstream
     }
     catch(error){
         console.error("Error fetching pinned:", error);
@@ -45,21 +43,6 @@ export async function GET(req : NextRequest){
 }
 
 export async function POST(req : Request){
-
-=======
-    }
-    catch(error){
-        console.error("Error fetching pinned:", error);
-        return NextResponse.json(
-            { error: "Internal Server Error" },
-            { status: 500 },
-        );
-    }
-}
-
-export async function POST(req : Request){
-
->>>>>>> Stashed changes
     try{
         const { thread_id , user_id } = await req.json();
         const response = await database.query({
@@ -106,6 +89,4 @@ export async function POST(req : Request){
             { status : 500 }
         );
     }
-
-
 }
