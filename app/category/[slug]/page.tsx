@@ -2,14 +2,8 @@ import React from "react";
 import ThreadList from "@/components/ThreadList";
 import Link from "next/link";
 import { slugify } from "@/models/slugify";
+import { Subcategory } from "@/app/interfaces/interfaces";
 
-interface Subcategory {
-  id: number;
-  name: string;
-  description: string;
-  thread_count: number;
-  post_count: number;
-}
 
 async function getCategoryData(categorySlug: string) {
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
