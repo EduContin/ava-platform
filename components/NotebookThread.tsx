@@ -174,41 +174,39 @@ const NotebookThread: React.FC<NotebookThread> = ({removePinned, threadProp}) =>
     return (
         <SessionProviderClient session={session}>
             {thread && (
-                <div className="bg-gray-800/90 backdrop-blur-sm w-full rounded-lg p-6 mb-2">
-                    <div className="flex items-center w-full justify-between">
-                        <h2 className="text-2xl font-bold">
+                <div className="bg-gradient-to-br from-[#181f2e]/90 to-[#232946]/90 backdrop-blur-sm w-full rounded-2xl p-8 mb-4 shadow-xl border border-[#232946]/40">
+                    <div className="flex items-center w-full justify-between mb-2">
+                        <h2 className="text-2xl font-bold text-slate-100 drop-shadow">
                             <a href={`/thread/${slugify(thread.title)}-${thread.id}`}>{thread.title}</a>
                         </h2>
-                        <div className="flex flex-row align-right space-x-10">
-                            <button onClick={() => removePinned(thread.id)}
-                            className="px-4 py-2 p-2 bg-blue-600 border-none
-                            rounded-md cursor-pointer flex items-center space-x-3
-                            hover:bg-blue-800
-                            transition-all duration-800 ease-in-out
-                            active:scale-105 transform"
+                        <div className="flex flex-row align-right space-x-6">
+                            <button
+                            onClick={() => removePinned(thread.id)}
+                            className="px-4 py-2 bg-blue-600 border-none rounded-md cursor-pointer flex items-center gap-2 hover:bg-blue-800 transition-all duration-300 active:scale-105"
                             >
-                                <img src="/push-pin.png" alt="Button Pin" className={`w-6 h-6 transition-transform
-                                duration-300 ease-in-out rotate-180`}/>
-                                <span>Unpin from Favorites</span>
-                                
+                                <img
+                                src="/push-pin.png"
+                                alt="Button Pin"
+                                className="w-6 h-6 transition-transform duration-300 rotate-180"
+                                />
+                                <span className="text-white font-medium">Unpin from Favorites</span>
                             </button>
                         </div>
                     </div>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-slate-400 mb-4">
                         Posted by
-                        <a href={`/users/${thread.username}`}> {thread.username} </a>
-                        in {thread.category_name} on{" "}
+                        <a href={`/users/${thread.username}`} className="underline hover:text-blue-400"> {thread.username} </a>
+                        in <span className="font-semibold">{thread.category_name}</span> on{" "}
                         {new Date(thread.created_at).toLocaleString()}
                     </p>
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                         {posts.map((post) => (
-                            <div key={post.id} className="flex">
-                                <div className=" pr-4">{renderUserProfile(post)}</div>
-
+                            <div key={post.id} className="flex gap-4">
+                                <div className="pr-2">{renderUserProfile(post)}</div>
                                 <div className="w-5/6">
-                                    <div className="rounded-lg p-4 bg-gray-700/50 overflow-hidden">
+                                    <div className="rounded-xl p-5 bg-[#232946]/80 border border-[#2b354b] shadow-md overflow-hidden">
                                         <div className="flex justify-between items-center mb-2">
-                                            <span className="text-sm text-gray-400">
+                                            <span className="text-xs text-slate-400">
                                                 {new Date(post.created_at).toLocaleString()}
                                             </span>
                                         </div>
@@ -222,23 +220,22 @@ const NotebookThread: React.FC<NotebookThread> = ({removePinned, threadProp}) =>
                                             ) : (renderContentWithEmojisAndBBCode(post.content))}
                                         </div>
                                         {!post.is_deleted && (
-                                            <div className="mt-2 flex items-center">
+                                            <div className="mt-2 flex items-center gap-2">
                                                 <svg
                                                     className={`w-5 h-5 ${post.is_liked_by_user ? 'text-blue-500': 'text-gray-400'}`}
                                                     fill="currentColor"
-                                                    
                                                     viewBox="0 0 20 20">
                                                     <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                                                 </svg>
 
-                                                <span>{post.likes_count}</span>
+                                                <span className="text-slate-300">{post.likes_count}</span>
                                             </div>
                                         )}
                                     </div>
                                     {!post.is_deleted && post?.signature && (
-                                        <div className="mt-4 bg-gray-900 rounded-lg p-4 h-64 overflow-y-auto">
-                                            <h3 className="text-lg font-semibold">User Signature:</h3>
-                                            <div className="overflow-wrap-break-word word-break-break-word max-w-full">
+                                        <div className="mt-4 bg-[#181f2e] rounded-lg p-4 h-32 overflow-y-auto border border-[#2b354b]">
+                                            <h3 className="text-base font-semibold text-slate-200 mb-2">User Signature:</h3>
+                                            <div className="overflow-wrap-break-word word-break-break-word max-w-full text-slate-300">
                                             {renderContentWithEmojisAndBBCode(
                                                 post.signature,
                                             )}
