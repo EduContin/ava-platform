@@ -132,16 +132,36 @@ export async function DELETE(
     });
 
     // Delete the posts
-    await database.query({
-      text: "DELETE FROM posts WHERE thread_id = $1",
+    const users = await database.query({
+      text: "DELETE FROM posts WHERE thread_id = $1 RETURNING user_id",
       values: [threadId],
     });
 
+    //Update posts count from every user
+    if(users.rows.length > 0){
+      for(let i = 0; i < users.rows.length;  i++){
+        await database.query({
+          text : `UPDATE users SET posts_count = posts_count-1 WHERE id=$1`,
+          values : [users.rows[i].user_id]
+        });
+      }
+    }
+
     // Finally, delete the thread
     const result = await database.query({
-      text: "DELETE FROM threads WHERE id = $1",
+      text: "DELETE FROM threads WHERE id = $1 RETURNING user_id",
       values: [threadId],
     });
+
+    // Update user threads_count
+    if(result.rows.length > 0){
+      await database.query({
+        text: `UPDATE users SET threads_count = threads_count -1 WHERE id=$1`,
+        values : [result.rows[0].user_id]
+      });
+    }
+    
+
 
     // Commit the transaction
     await database.query("COMMIT");

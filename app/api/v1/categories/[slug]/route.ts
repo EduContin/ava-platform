@@ -24,10 +24,21 @@ export async function GET(
             ) sub
           ) AS subcategories
         FROM categories c
-        WHERE LOWER(REPLACE(REPLACE(c.name, ' ', '-'), '&', 'and')) = $1
+        WHERE REGEXP_REPLACE(LOWER(c.name), '[^a-z0-9]+', '-', 'g') = $1
       `,
       values: [slug.toLowerCase()],
     };
+
+    const text = `SELECT name,
+          REGEXP_REPLACE(LOWER(name), '[^a-z0-9]+', '-', 'g') AS slug_name
+          FROM categories`;
+
+    const result_1 = await database.query(text);
+
+    if(result_1.rows.length > 0){
+      console.log("NOME DAS CATEGORIAS COM SLUG: ");
+      console.log(result_1.rows);
+    }
 
     const result = await database.query(categoryQuery);
 
