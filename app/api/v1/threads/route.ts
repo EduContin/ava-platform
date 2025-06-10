@@ -98,7 +98,8 @@ export async function POST(request: NextRequest) {
     await database.query({
       text: `
         UPDATE users
-        SET threads_count = threads_count + 1
+        SET threads_count = threads_count + 1,
+        posts_count = posts_count + 1
         WHERE id = $1
       `,
       values: [userId],

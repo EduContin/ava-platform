@@ -35,10 +35,17 @@ export async function POST(request: NextRequest) {
       text: `
         INSERT INTO posts (content, thread_id, user_id)
         VALUES ($1, $2, $3)
-        RETURNING id
+        RETURNING id, user_id
       `,
       values: [content, threadId, userId],
     });
+
+    if(result.rows.length > 0){
+      await database.query({
+        text : `UPDATE users SET posts_count = posts_count + 1 WHERE id=$1`,
+        values : [result.rows[0].user_id]
+      });
+    }
 
     return NextResponse.json({ postId: result.rows[0].id }, { status: 201 });
   } catch (error) {
@@ -64,7 +71,7 @@ export async function DELETE(request: NextRequest) {
         UPDATE posts
         SET content = 'This content was deleted', is_deleted = true
         WHERE id = $1
-        RETURNING id, content, is_deleted
+        RETURNING id, content, is_deleted, user_id
       `,
       values: [postId],
     });

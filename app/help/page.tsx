@@ -123,17 +123,17 @@ const HelpPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-4 md:p-8">
       <Head>
-        <title>AVA Platform - Help & Information</title>
+        <title>VEC Platform - Help & Information</title>
         <meta
           name="description"
-          content="Help and information for AVA learning platform"
+          content="Help and information for VEC learning platform"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-8 text-blue-400">
-          Welcome to AVA Learning Platform
+          Welcome to VEC Learning Platform
         </h1>
 
         <nav className="mb-8 p-4 bg-gray-800 rounded-lg">
@@ -186,7 +186,7 @@ const HelpPage: React.FC = () => {
             About Our Platform
           </h2>
           <p className="text-gray-300 mb-4">
-            AVA (Virtual Learning Environment) is a comprehensive educational platform designed to facilitate 
+            VEC (Virtual Education and Communication) is a comprehensive educational platform designed to facilitate 
             effective online learning and collaboration between students, educators, and academic institutions. 
             Our mission is to create an engaging, accessible, and supportive digital learning environment that 
             enhances educational outcomes for learners of all levels.
@@ -275,10 +275,10 @@ const HelpPage: React.FC = () => {
           <p className="text-gray-300">
             For technical support, academic assistance, or general inquiries, please contact us at:{" "}
             <a
-              href="mailto:support@ava-platform.edu"
+              href="mailto:support@vec-platform.edu"
               className="text-blue-400 hover:underline"
             >
-              support@ava-platform.edu
+              support@vec-platform.edu
             </a>
           </p>
           <p className="mt-4 p-4 bg-blue-900 text-gray-300 rounded-lg italic">
