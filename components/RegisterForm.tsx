@@ -85,9 +85,10 @@ export default function RegisterForm() {
 
       if (response.ok) {
         setIsSuccess(true);
-        //Sending automatically to the login page, doesnt give the time
-        //for the message o sucessful registration
-        //router.push("/login")
+        // Redirect to login page after showing success message
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000); // 2 second delay to show success message
         
       } else {
         const errorData = await response.json();
