@@ -48,7 +48,6 @@ const Navbar: React.FC = () => {
 
   const navigationItems = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/search", label: "Search", icon: Search },
     { href: "/notebook", label: "Your Notebook", icon: BookOpen },
     { href: "/help", label: "Help", icon: HelpCircle },
   ];
