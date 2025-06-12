@@ -48,7 +48,7 @@ const NotebookThread: React.FC<NotebookThread> = ({removePinned, threadProp}) =>
                         </h3>
                     </div>
                     <Image
-                    src={user.avatar_url || `/winter_soldier.gif`}
+                    src={user.avatar_url || `/prof-pic.png`}
                     alt="Profile Picture"
                     width={10}
                     height={10}

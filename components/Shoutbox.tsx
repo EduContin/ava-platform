@@ -293,7 +293,7 @@ const Shoutbox = () => {
                     <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-all duration-200 border border-transparent hover:border-border/30">
                       <Avatar className="h-8 w-8 ring-2 ring-background shadow-sm">
                         <AvatarImage 
-                          src={msg.avatar_url || "/winter_soldier.gif"} 
+                          src={msg.avatar_url || "/prof-pic.png"} 
                           alt={msg.username}
                         />
                         <AvatarFallback className="text-xs font-medium bg-gradient-to-br from-primary/20 to-secondary/20">

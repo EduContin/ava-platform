@@ -10,7 +10,7 @@ export default withAuth(
       path === "/login" ||
       path === "/register" ||
       path === "/banned" ||
-      path === "/winter_soldier.gif"
+      path === "/prof-pic.png"
     ) {
       return NextResponse.next();
     }

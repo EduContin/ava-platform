@@ -250,7 +250,7 @@ export default function UserProfile({
               className="w-40 h-40 rounded-lg overflow-hidden shadow-lg mb-6 md:mb-0 md:mr-8"
             >
               <Image
-                src={user.avatar_url || "/winter_soldier.gif"}
+                src={user.avatar_url || "/prof-pic.png"}
                 alt={user.username}
                 width={160}
                 height={160}
