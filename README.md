@@ -1,4 +1,4 @@
-A forum for Software Engineers
+A forum for Educational institutions
 
 ```bash
 npm run dev
